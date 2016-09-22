@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "file_example", "file_example\file_example.vcxproj", "{56E777CD-0289-4C57-A6E4-1758B07EDED2}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "app_crash_manager", "app_crash_manager\app_crash_manager.vcxproj", "{92331FC7-141C-4DE9-9E7A-81BEC3A9C83A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +15,10 @@ Global
 		{56E777CD-0289-4C57-A6E4-1758B07EDED2}.Debug|Win32.Build.0 = Debug|Win32
 		{56E777CD-0289-4C57-A6E4-1758B07EDED2}.Release|Win32.ActiveCfg = Release|Win32
 		{56E777CD-0289-4C57-A6E4-1758B07EDED2}.Release|Win32.Build.0 = Release|Win32
+		{92331FC7-141C-4DE9-9E7A-81BEC3A9C83A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{92331FC7-141C-4DE9-9E7A-81BEC3A9C83A}.Debug|Win32.Build.0 = Debug|Win32
+		{92331FC7-141C-4DE9-9E7A-81BEC3A9C83A}.Release|Win32.ActiveCfg = Release|Win32
+		{92331FC7-141C-4DE9-9E7A-81BEC3A9C83A}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

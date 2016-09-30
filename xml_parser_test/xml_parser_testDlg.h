@@ -31,5 +31,5 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedButtonXMLParser_Memory();
-	afx_msg void OnBnClickedButtonTest();
+	afx_msg void OnBnClickedButtonXMLParser_File();
 };

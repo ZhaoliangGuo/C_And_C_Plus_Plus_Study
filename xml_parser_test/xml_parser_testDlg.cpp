@@ -68,7 +68,7 @@ BEGIN_MESSAGE_MAP(Cxml_parser_testDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON1, &Cxml_parser_testDlg::OnBnClickedButtonXMLParser_Memory)
-	ON_BN_CLICKED(IDC_BUTTON2, &Cxml_parser_testDlg::OnBnClickedButtonTest)
+	ON_BN_CLICKED(IDC_BUTTON3, &Cxml_parser_testDlg::OnBnClickedButtonXMLParser_File)
 END_MESSAGE_MAP()
 
 
@@ -163,7 +163,7 @@ void Cxml_parser_testDlg::OnBnClickedButtonXMLParser_Memory()
 {
 	char szXML[] = "<?xml version=\"1.0\" encoding=\"utf-8\"?> \
 					<MediaServerRequest> \
-						<ServerAccount>admin</ServerAccount> \
+						<ServerAccount>admin_memory</ServerAccount> \
 						<ServerPassword>123456</ServerPassword> \
 					</MediaServerRequest>";
 
@@ -262,7 +262,7 @@ void Cxml_parser_testDlg::OnBnClickedButtonXMLParser_Memory()
 	}
 
 	CString strMsg("");
-	strMsg = "解析结果:\n strServerAcount: ";
+	strMsg = "读取内存中XML 解析结果:\n strServerAcount: ";
 	strMsg += strServerAcount;
 	strMsg += "\n strServerPassword: ";
 	strMsg += strServerPassword;
@@ -270,12 +270,110 @@ void Cxml_parser_testDlg::OnBnClickedButtonXMLParser_Memory()
 	AfxMessageBox(strMsg);
 }
 
-void Cxml_parser_testDlg::OnBnClickedButtonTest()
+// 读取包含xml内容的文件进行解析
+void Cxml_parser_testDlg::OnBnClickedButtonXMLParser_File()
 {
-	/*for (int i = 0; i < 10000; i++)
+	IXMLDOMDocumentPtr		    m_pXMLDoc;      // 指向整个XML文档  
+	IXMLDOMElementPtr		    m_pRootElement; // 指向根节点
+
+	_variant_t varXMLFile(".\\test.xml");
+
+	// 创建Document对象
+	HRESULT hr = CoCreateInstance(CLSID_DOMDocument,
+		NULL,
+		CLSCTX_INPROC_SERVER,
+		IID_IXMLDOMDocument,
+		(void**)&m_pXMLDoc);
+
+	if(SUCCEEDED(hr))
 	{
-	OnBnClickedButtonXMLParser_Memory();
+		VARIANT_BOOL bIsSuccessful;
+		hr = m_pXMLDoc->load(varXMLFile, &bIsSuccessful); // 加载要解析的XML文件
+		if (!bIsSuccessful)
+		{
+			AfxMessageBox("m_pXMLDoc->load Fail");
+			return ;
+		}
 	}
 
-	AfxMessageBox("Done");*/
+	hr = m_pXMLDoc->get_documentElement(&m_pRootElement);
+	if (FAILED(hr))
+	{
+		AfxMessageBox("m_pXMLDoc->get_documentElement Fail");
+		return ;
+	}
+
+	// 定义访问XML的指针
+	IXMLDOMNodePtr	pXMLNode	 = NULL; // 指向第2层节点
+	IXMLDOMNodePtr	pNextXMLNode = NULL; // 指向第2层的下一个节点
+
+	BSTR bstrName = NULL;
+	BSTR bstrText = NULL;
+
+	hr = m_pRootElement->get_firstChild(&pXMLNode); 
+	if (FAILED(hr))
+	{
+		AfxMessageBox("m_pRootElement->get_firstChild Fail");
+		return ;
+	}
+
+	CString strServerAcount("");
+	CString strServerPassword("");
+
+	while(SUCCEEDED(hr) && (pXMLNode != NULL))
+	{
+		USES_CONVERSION;
+
+		bstrName = NULL;
+		bstrText = NULL;
+
+		// 获取节点的名字
+		pXMLNode->get_nodeName(&bstrName);
+
+		// 获取节点的内容
+		pXMLNode->get_text(&bstrText);     
+
+		_bstr_t bstr_t(bstrText);
+		string strTest(bstr_t);
+		const char* lpszText = strTest.c_str();
+
+		if(!wcscmp(bstrName, L"ServerAccount"))
+		{
+			if (0 != strlen(lpszText))
+			{
+				strServerAcount.Format("%s", lpszText);
+			}
+		}
+		else if(!wcscmp(bstrName, L"ServerPassword"))
+		{
+			if (0 != strlen(lpszText))
+			{
+				strServerPassword.Format("%s", lpszText);
+			}	
+		}
+
+		pNextXMLNode = NULL;
+		pXMLNode->get_nextSibling(&pNextXMLNode); // 指向下一个2级节点
+		pXMLNode = pNextXMLNode;
+
+		if (NULL != bstrName)
+		{
+			SysFreeString(bstrName);
+			bstrName = NULL;
+		}
+
+		if (NULL != bstrText)
+		{
+			SysFreeString(bstrText);
+			bstrText = NULL;
+		}
+	}
+
+	CString strMsg("");
+	strMsg = "读取文件中XML 解析结果:\n strServerAcount: ";
+	strMsg += strServerAcount;
+	strMsg += "\n strServerPassword: ";
+	strMsg += strServerPassword;
+
+	AfxMessageBox(strMsg);
 }

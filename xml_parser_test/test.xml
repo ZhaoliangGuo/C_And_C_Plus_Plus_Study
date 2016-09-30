@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MediaServerRequest>
+	<ServerAccount>admin_file</ServerAccount>
+	<ServerPassword>123456</ServerPassword>	
+</MediaServerRequest>

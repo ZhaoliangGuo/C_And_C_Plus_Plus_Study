@@ -14,7 +14,11 @@ void TestQueue();
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	TestQueue();
+	//TestQueue();
+
+	TestVector();
+
+	getchar();
 
 
 	return 0;
@@ -26,7 +30,6 @@ void TestQueue()
 	qiNum.push(1);
 	qiNum.push(2);
 	qiNum.push(3);
-
 
 	int i = qiNum.front();
 
@@ -55,18 +58,43 @@ void TestVector()
 	vecNum.push_back(3);
 	vecNum.push_back(4);
 
+	printf("******************orginal vector*****************\n");
 	int nSize = vecNum.size();
-
-	int nTemp = 0;
-	nTemp = vecNum.back();
-	vecNum.pop_back();
-	vecNum.pop_back();
-
-	nSize = vecNum.size();
-
 	for (int i = 0; i < nSize; i++ )
 	{
 		cout<<"vecNum["<<i<<"] : "<<vecNum[i]<<endl;
 	}
+
+	int nTemp = 0;
+	nTemp = vecNum.back();
+	cout<<"vecNum.back() : "<<nTemp<<endl; // 4 
+
+	printf("******************after pop_back*****************\n");
+	vecNum.pop_back(); // 出栈， 即弹出栈顶的元素
+	nSize = vecNum.size();
+	for (int i = 0; i < nSize; i++ )
+	{
+		cout<<"vecNum["<<i<<"] : "<<vecNum[i]<<endl;
+	}
+
+	/*
+	vecNum[0] : 1
+	vecNum[1] : 2
+	vecNum[2] : 3
+	*/
+
+	printf("******************after erase*****************\n");
+	vecNum.erase(vecNum.begin(), vecNum.begin() + 1); // 删除首元素，即处于栈底的元素
+	nSize = vecNum.size();
+	for (int i = 0; i < nSize; i++ )
+	{
+		cout<<"vecNum["<<i<<"] : "<<vecNum[i]<<endl;
+	}
+
+	/*
+	******************erase*****************
+	vecNum[0] : 2
+	vecNum[1] : 3
+	*/
 }
 

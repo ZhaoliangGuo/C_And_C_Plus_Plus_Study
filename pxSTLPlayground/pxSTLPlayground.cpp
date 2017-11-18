@@ -5,7 +5,34 @@
 #include <vector>
 #include <iostream>
 #include <queue>
+#include <map>
 using namespace std;
+
+struct SPxUserInfo
+{
+#define MAX_NAME_LEN (512)
+
+	unsigned int nUserId;
+	char szName[MAX_NAME_LEN];
+	int  nAge;
+
+	SPxUserInfo()
+	{
+		Flush();
+	}
+
+	~SPxUserInfo()
+	{
+		Flush();
+	}
+
+	void Flush()
+	{
+		nUserId = 0;
+		memset(szName, 0,  MAX_NAME_LEN);
+		nAge = 0;
+	}
+};
 
 void TestVector();
 void TestMap();
@@ -16,7 +43,9 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 	//TestQueue();
 
-	TestVector();
+	TestMap();
+
+	//TestVector();
 
 	getchar();
 
@@ -47,7 +76,143 @@ void TestQueue()
 
 void TestMap()
 {
+	std::map <unsigned int, SPxUserInfo> mapUser;
 
+	// 添加数据
+	SPxUserInfo sPxUserInfo;
+	sPxUserInfo.nUserId = 110;
+	strcpy(sPxUserInfo.szName, "Kate"); 
+	sPxUserInfo.nAge = 18;
+
+	printf("数组方式插入关键字为%d的数据, Name:%s...\n", sPxUserInfo.nUserId, sPxUserInfo.szName);
+	std::map <unsigned int, SPxUserInfo> :: iterator iter = mapUser.find(sPxUserInfo.nUserId);
+	if (mapUser.end() == iter)
+	{
+		// 这种方式如果某关键字的数据已存在，会直接覆盖旧的.
+		mapUser[sPxUserInfo.nUserId] = sPxUserInfo; // 用数组方式插入数据
+	}
+
+	// 遍历map
+	printf("遍历map....\n");
+	iter = mapUser.begin();
+	while (mapUser.end() != iter)
+	{
+		sPxUserInfo = iter->second;
+		printf("Id: %d, Name: %s, Age: %d\n", 
+			sPxUserInfo.nUserId, sPxUserInfo.szName, sPxUserInfo.nAge);
+
+		iter++;
+	}
+	printf("遍历结束. 元素个数:%d\n\n", mapUser.size());
+
+	strcpy(sPxUserInfo.szName,"New Kate");
+	printf("用数组方式插入 关键字为%d 变化后的数据, Name:%s ...\n", sPxUserInfo.nUserId, sPxUserInfo.szName);
+	mapUser[sPxUserInfo.nUserId] = sPxUserInfo; // 直接覆盖
+	printf("遍历map....\n");
+	iter = mapUser.begin();
+	while (mapUser.end() != iter)
+	{
+		sPxUserInfo = iter->second;
+		printf("Id: %d, Name: %s, Age: %d\n", 
+			sPxUserInfo.nUserId, sPxUserInfo.szName, sPxUserInfo.nAge);
+
+		iter++;
+	}
+	printf("遍历结束. 元素个数:%d\n\n", mapUser.size());
+
+	sPxUserInfo.nUserId = 120;
+	strcpy(sPxUserInfo.szName, "James");
+	sPxUserInfo.nAge = 20;
+
+	printf("insert方式插入关键字为%d的数据, Name:%s ...\n", sPxUserInfo.nUserId, sPxUserInfo.szName);
+
+	iter = mapUser.find(sPxUserInfo.nUserId);
+	if (mapUser.end() == iter)
+	{
+		// 用insert方式插入数据
+		// 这种方式指定关键字存在 则无法插入
+		mapUser.insert(pair <unsigned int, SPxUserInfo> (sPxUserInfo.nUserId, sPxUserInfo));
+	}
+
+	printf("遍历map....\n");
+	iter = mapUser.begin();
+	while (mapUser.end() != iter)
+	{
+		sPxUserInfo = iter->second;
+		printf("Id: %d, Name: %s, Age: %d\n", 
+			sPxUserInfo.nUserId, sPxUserInfo.szName, sPxUserInfo.nAge);
+
+		iter++;
+	}
+	printf("遍历结束. 元素个数:%d\n\n", mapUser.size());
+
+	strcpy(sPxUserInfo.szName, "New James");
+	printf("insert方式插入关键字为%d 修改后的数据, Name:%s ...\n", sPxUserInfo.nUserId, sPxUserInfo.szName);
+	mapUser.insert(pair<unsigned int, SPxUserInfo> (sPxUserInfo.nUserId, sPxUserInfo));
+
+	printf("遍历map....\n");
+	iter = mapUser.begin();
+	while (mapUser.end() != iter)
+	{
+		sPxUserInfo = iter->second;
+		printf("Id: %d, Name: %s, Age: %d\n", 
+			sPxUserInfo.nUserId, sPxUserInfo.szName, sPxUserInfo.nAge);
+
+		iter++;
+	}
+	printf("遍历结束. 元素个数:%d\n\n", mapUser.size());
+
+	// 删除指定元素
+	int nUserId = 110;
+	printf("删除nUserId = %d的元素...\n", nUserId);
+
+	// 方式1
+	//iter = mapUser.find(nUserId);
+	//if (mapUser.end() != iter) // 如果找到
+	//{
+	//	mapUser.erase(iter);
+	//}
+
+	// 方式2 
+	mapUser.erase(nUserId);
+
+	for (iter = mapUser.begin(); iter != mapUser.end(); iter++)
+	{
+		sPxUserInfo = iter->second;
+		printf("Id: %d, Name: %s, Age: %d\n", 
+			sPxUserInfo.nUserId, sPxUserInfo.szName, sPxUserInfo.nAge);
+	}
+	printf("删除元素结束.元素个数:%d\n", mapUser.size());
+
+	// 判断map是否为空
+	if (mapUser.empty()) // empty函数: return true only if sequence is empty
+	{
+		printf("map is empty\n");
+	}
+	else
+	{
+		printf("map is not empty\n");
+	}
+
+	printf("\n");
+
+	// 清空所有元素
+	// 方式1:
+	mapUser.clear();
+
+	// 方式2:
+	// 清空方式2
+	//mapUser.erase(mapUser.begin(), mapUser.end());
+
+	printf("开始清空所有元素...\n");
+	if (mapUser.empty()) // empty函数: return true only if sequence is empty
+	{
+		printf("map is empty\n");
+	}
+	else
+	{
+		printf("map is not empty\n");
+	}
 }
 
 void TestVector()

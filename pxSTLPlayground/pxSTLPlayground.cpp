@@ -5,8 +5,11 @@
 #include <vector>
 #include <iostream>
 #include <queue>
+#include <list>
 #include <map>
 using namespace std;
+
+#include "pxList.h"
 
 struct SPxUserInfo
 {
@@ -43,9 +46,11 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 	//TestQueue();
 
-	TestMap();
+	//TestMap();
 
 	//TestVector();
+
+	TestList();
 
 	getchar();
 

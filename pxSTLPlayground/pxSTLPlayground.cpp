@@ -48,9 +48,9 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	//TestMap();
 
-	//TestVector();
+	TestVector();
 
-	TestList();
+	//TestList();
 
 	getchar();
 
@@ -220,6 +220,40 @@ void TestMap()
 	}
 }
 
+struct SPxSampleItem
+{
+	int nIndex; 
+	int nValue;  // 最大值
+
+	SPxSampleItem()
+	{
+		Flush();
+	}
+
+	~SPxSampleItem()
+	{
+		Flush();
+	}
+
+	void Flush()
+	{
+		nIndex = -1;
+		nValue = -1;
+	}
+};
+
+// 升序排序规则
+inline bool index_ascending(const SPxSampleItem & m1, const SPxSampleItem & m2) 
+{
+	return m1.nIndex < m2.nIndex;
+}
+
+// 降序排序规则
+inline bool value_descending(const SPxSampleItem & m1, const SPxSampleItem & m2) 
+{
+	return m1.nValue > m2.nValue;
+}
+
 void TestVector()
 {
 	vector <int> vecNum;
@@ -266,5 +300,52 @@ void TestVector()
 	vecNum[0] : 2
 	vecNum[1] : 3
 	*/
+
+
+	// 演示排序
+	//////////////////////////////////////////////////////////////////////////
+	vector <SPxSampleItem> vsItem;
+	SPxSampleItem sSampleItem;
+	sSampleItem.nIndex = 3;
+	sSampleItem.nValue = 500;
+	vsItem.push_back(sSampleItem);
+
+	sSampleItem.nIndex = 2;
+	sSampleItem.nValue = 5;
+	vsItem.push_back(sSampleItem);
+
+	sSampleItem.nIndex = 1;
+	sSampleItem.nValue = 5000;
+	vsItem.push_back(sSampleItem);
+
+	sSampleItem.nIndex = 4;
+	sSampleItem.nValue = 50;
+	vsItem.push_back(sSampleItem);
+
+	printf("\n The original data ...\n");
+	vector <SPxSampleItem> ::iterator iter = vsItem.begin();
+	for(; iter != vsItem.end(); ++iter)
+	{
+		printf("Index: %4d, Value: %4d\n", iter->nIndex, iter->nValue);
+	}
+
+	// 根据value按降序排列
+	::sort(vsItem.begin(), vsItem.end(), value_descending);
+
+	printf("\nAfter descending by value ...\n");
+	iter = vsItem.begin();
+	for(; iter != vsItem.end(); ++iter)
+	{
+		printf("Index: %4d, Value: %4d\n", iter->nIndex, iter->nValue);
+	}
+
+	// 根据index进行升序排列
+	::sort(vsItem.begin(), vsItem.end(), index_ascending);
+	printf("\nAfter ascending by index ...\n");
+	iter = vsItem.begin();
+	for(; iter != vsItem.end(); ++iter)
+	{
+		printf("Index: %4d, Value: %4d\n", iter->nIndex, iter->nValue);
+	}
 }
 
